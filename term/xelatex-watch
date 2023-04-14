@@ -11,5 +11,5 @@ fi
 while true
 do
     inotifywait --event close_write $TEXFILE
-    xelatex $TEXFILE
+    xelatex --interaction=batchmode $TEXFILE
 done
