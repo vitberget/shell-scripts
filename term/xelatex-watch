@@ -1,0 +1,15 @@
+#!/bin/env sh
+TEXFILE=$1
+
+if [ $# -eq 0 ]
+then
+    echo "Usage: $(basename $0) <some-file.tex>"
+    exit 1
+fi
+
+
+while true
+do
+    inotifywait --event close_write $TEXFILE
+    xelatex $TEXFILE
+done
