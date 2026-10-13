@@ -1,0 +1,22 @@
+#!/usr/bin/env zsh
+ppids=$(sudo lsns -t mnt -n -o PPID)
+uids=""
+for ppid in ${(f)ppids}; do
+    trimmed=$(echo "$ppid" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+    case $trimmed in
+        0) ;;
+        *)
+        uids="${uids}\n$(stat -c '%u' /proc/$trimmed)"
+        ;;
+    esac
+done
+
+
+sorted=$(echo "$uids" | sort -u)
+for uid in ${(f)sorted}; do
+    echo -n "User $uid "
+    sudo -u \#$uid whoami
+    sudo -u \#$uid podman ps -a
+
+    echo 
+done
